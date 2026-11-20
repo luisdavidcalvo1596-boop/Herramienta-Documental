@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anexo A - Gonawindua IPS Indígena</title>
+  <style>
+    :root {
+      --primary: #1e5631;
+      --primary-light: #e8f3ec;
+      --danger: #b91c1c;
+      --danger-bg: #fef2f2;
+      --border: #cbd5e1;
+      --bg: #f1f5f9;
+      --text: #1e293b;
+    }
+    * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    body { margin: 0; background: var(--bg); color: var(--text); padding: 10px; }
+    .container { max-width: 1120px; margin: 0 auto; background: #fff; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); padding: 18px; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 14px; position: sticky; top: 5px; z-index: 50; }
+    .badge-offline { background: #dcfce7; color: #166534; padding: 5px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; }
+    .btn { border: none; padding: 9px 14px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-info { background: #0369a1; color: #fff; }
+    .btn-warning { background: #b45309; color: #fff; }
+    .btn-secondary { background: #e2e8f0; color: #1e293b; }
+
+    /* Membrete adaptable a PC, tablet y celular */
+    .membrete-box {
+      text-align: center;
+      margin-bottom: 14px;
+      border-bottom: 2px solid #e2e8f0;
+      padding: 6px 8px 12px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .membrete-box img {
+      display: block;
+      width: 100%;
+      max-width: 780px;
+      height: auto;
+      max-height: clamp(64px, 13vw, 125px);
+      object-fit: contain;
+    }
+
+    /* Ruta crítica adaptable y legible */
+    .ruta-box {
+      border: 2px solid #0369a1;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 14px 0 18px 0;
+      background: #f8fafc;
+      text-align: center;
+    }
+    .ruta-box-title {
+      font-weight: 700;
+      color: #0369a1;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+      text-align: left;
+    }
+    .ruta-box img {
+      display: block;
+      margin: 0 auto;
+      width: 100%;
+      max-width: 820px;
+      max-height: 75vh;
+      height: auto;
+      object-fit: contain;
+      border-radius: 6px;
+      background: #fff;
+    }
+
+    .img-fallback {
+      display: none;
+      width: 100%;
+      background: #fffbeb;
+      border: 1px dashed #d97706;
+      color: #92400e;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      margin-top: 8px;
+      text-align: left;
+    }
+
+    .doc-title { background: var(--primary); color: #fff; padding: 9px 14px; border-radius: 6px; font-size: 0.98rem; font-weight: 700; margin: 16px 0 10px 0; }
+    .instructions { background: #fffbeb; border-left: 4px solid #d97706; padding: 9px 12px; font-size: 0.84rem; margin-bottom: 14px; border-radius: 0 6px 6px 0; }
+    .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; margin-bottom: 14px; }
+    .field { display: flex; flex-direction: column; gap: 3px; }
+    .field label { font-size: 0.78rem; font-weight: 700; color: #475569; }
+    input[type="text"], input[type="number"], input[type="date"], input[type="time"], select {
+      padding: 7px 8px; border: 1px solid var(--border); border-radius: 5px; font-size: 0.86rem; width: 100%;
+    }
+    .table-wrap { overflow-x: auto; margin-bottom: 14px; border: 1px solid var(--border); border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.83rem; min-width: 740px; }
+    th { background: var(--primary-light); color: var(--primary); font-weight: 700; text-align: left; padding: 8px; border-bottom: 2px solid var(--primary); border-right: 1px solid var(--border); }
+    td { padding: 6px 7px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); vertical-align: middle; }
+    tr:nth-child(even) { background: #f8fafc; }
+    .calc-cell { font-weight: 700; text-align: center; background: #f1f5f9; }
+    .alert-row { background: var(--danger-bg) !important; }
+    .alert-banner { display: none; background: var(--danger); color: #fff; padding: 10px 14px; border-radius: 6px; font-weight: 600; margin-bottom: 12px; font-size: 0.88rem; }
+    .radio-group { display: flex; gap: 5px; justify-content: center; }
+    .radio-pill { padding: 4px 8px; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 0.78rem; user-select: none; }
+    .radio-pill.active-si { background: #16a34a; color: #fff; border-color: #16a34a; }
+    .radio-pill.active-no { background: #dc2626; color: #fff; border-color: #dc2626; }
+    .radio-pill.active-na { background: #64748b; color: #fff; border-color: #64748b; }
+
+    /* Ventana emergente (Modal) */
+    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); z-index: 1000; align-items: center; justify-content: center; padding: 14px; }
+    .modal-box { background: #fff; width: 100%; max-width: 920px; max-height: 92vh; border-radius: 10px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.25); }
+    .modal-header { background: var(--primary); color: #fff; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+    .modal-body { padding: 16px; overflow-y: auto; flex: 1; font-size: 0.86rem; }
+    .modal-footer { padding: 12px 16px; background: #f8fafc; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+
+    .summary-card { background: var(--primary-light); border: 1px solid #bbf7d0; border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .summary-count { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
+
+    @media (max-width: 600px) {
+      body { padding: 6px; }
+      .container { padding: 12px; border-radius: 8px; }
+      .membrete-box img { max-width: 100%; max-height: 76px; }
+      .ruta-box { padding: 8px; }
+      .ruta-box img { max-height: 62vh; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="toolbar">
+    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+      <span class="badge-offline">● Listo Sin Internet</span>
+      <span id="save-status" style="font-size:0.78rem; color:#64748b;">Autoguardado activo</span>
+    </div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button class="btn btn-warning" onclick="abrirHistorialFormularios()">📋 Formularios (<span id="contador-btn">0</span>)</button>
+      <button class="btn btn-info" onclick="irARuta()">🗺️ Ruta Crítica</button>
+      <button class="btn btn-secondary" onclick="limpiarFormulario()">🗑️ Limpiar</button>
+      <button class="btn btn-primary" onclick="abrirVistaPrevia()">📥 Vista Previa / Excel</button>
+    </div>
+  </div>
+
+  <!-- Membrete -->
+  <div class="membrete-box">
+    <img id="img-membrete" src="img/membrete.png" alt="Membrete Gonawindua IPS Indígena" onerror="mostrarAvisoImagen('img-membrete', 'fallback-membrete')" />
+    <div id="fallback-membrete" class="img-fallback">
+      <strong>Nota:</strong> No se encontró <code>img/membrete.png</code>. Verifica que exista la carpeta <code>img</code> junto a <code>index.html</code> con el archivo <code>membrete.png</code>.
+    </div>
+  </div>
+
+  <div class="doc-title">Anexo A. Lista de chequeo consolidada del instrumental para jornadas extramurales</div>
+
+  <div class="meta-grid">
+    <div class="field"><label>Institución</label><input type="text" id="institucion" value="Gonawindua Ette Ennaka IPS Indígena" oninput="guardarDatos()" /></div>
+    <div class="field"><label>Proceso</label><input type="text" id="proceso" value="Bioseguridad, odontología general extramural" oninput="guardarDatos()" /></div>
+    <div class="field"><label>Código y versión</label><input type="text" id="codigo" value="Por asignar (propuesta 2026-II)" oninput="guardarDatos()" /></div>
+    <div class="field"><label>Comunidad o lugar</label><input type="text" id="comunidad" placeholder="Escriba la comunidad..." oninput="guardarDatos()" /></div>
+    <div class="field"><label>Fecha de salida y de regreso</label><input type="text" id="fechas" placeholder="Ej. 20/11/2026 al 24/11/2026" oninput="guardarDatos()" /></div>
+    <div class="field"><label>Días de jornada / pacientes por día</label><input type="text" id="dias_pacientes" placeholder="Ej. 4 días / 15 pacientes" oninput="guardarDatos()" /></div>
+    <div class="field"><label>Odontólogo responsable</label><input type="text" id="odontologo" placeholder="Nombre completo" oninput="guardarDatos()" /></div>
+    <div class="field"><label>Encargado de esterilización</label><input type="text" id="esterilizacion" placeholder="Nombre completo" oninput="guardarDatos()" /></div>
+    <div class="field"><label>Cupo de procedimientos críticos</label><input type="number" id="cupo_criticos" placeholder="0" oninput="guardarDatos()" /></div>
+  </div>
+
+  <div class="instructions">
+    <strong>Instrucciones:</strong> La diligencian el odontólogo responsable y el encargado de esterilización: bloque 1 al salir y al regresar; bloques 2 y 3 en el momento indicado. Total por instrumento = unidades por paquete × número de paquetes. Un <strong>«No»</strong> en un control crítico detiene la salida o el procedimiento hasta corregirlo.
+  </div>
+
+  <!-- BLOQUE 1 -->
+  <div class="doc-title">Bloque 1. Inventario consolidado: salida, uso y retorno</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Paquete</th><th>Instrumento</th><th>Clasificación</th>
+          <th style="width:80px;">Unid. x paq.</th><th style="width:80px;">N.º paq.</th>
+          <th style="width:80px;">Total sale</th><th style="width:105px;">Empaque íntegro e ind. virado</th>
+          <th style="width:80px;">Paq. abiertos</th><th style="width:80px;">Total regresa</th>
+          <th>Diferencia y observación</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-bloque1"></tbody>
+      <tfoot>
+        <tr style="background:#e8f3ec; font-weight:bold;">
+          <td colspan="4" style="text-align:right;">TOTAL CONSOLIDADO:</td>
+          <td id="sum-paquetes" style="text-align:center;">0</td>
+          <td id="sum-sale" style="text-align:center;">0</td>
+          <td></td>
+          <td id="sum-abiertos" style="text-align:center;">0</td>
+          <td id="sum-regresa" style="text-align:center;">0</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <!-- BLOQUE 2 -->
+  <div class="doc-title">Bloque 2. Verificaciones críticas</div>
+  <div id="alerta-critica" class="alert-banner">
+    ⚠️ ALERTA DE CONTROL CRÍTICO: Ha marcado «No» en uno o más controles críticos. Detenga el proceso y aplique la acción correctiva.
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:45px;">N.º</th><th>Criterio verificable</th>
+          <th style="width:120px;">Momento</th><th style="width:150px; text-align:center;">Estado</th>
+          <th>Acción si la respuesta es «No»</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-bloque2"></tbody>
+    </table>
+  </div>
+
+  <!-- BLOQUE 3A -->
+  <div class="doc-title">Bloque 3A. Desinfección de alto nivel de semicríticos en territorio</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Ciclo</th><th>Fecha</th><th>Activación solución (&lt;30 días)</th><th>Tira biomarcador</th>
+          <th>Limpieza previa y secado</th><th>Hora inicio</th><th>Hora fin</th>
+          <th>Tiempo = fabricante</th><th>Enjuague y secado</th><th>Responsable</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-bloque3a"></tbody>
+    </table>
+  </div>
+
+  <!-- BLOQUE 3B -->
+  <div class="doc-title">Bloque 3B. Ciclo químico nocturno de instrumental</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th style="width:190px;">Parámetro</th><th style="width:270px;">Criterio</th><th>Registro</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Producto, presentación y lote</strong></td>
+          <td>Producto con indicación de esterilización en su ficha y registro sanitario</td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <input type="text" id="b3b_prod" placeholder="Producto" style="width:150px;" oninput="guardarDatos()" />
+              <input type="text" id="b3b_lote" placeholder="Lote" style="width:110px;" oninput="guardarDatos()" />
+              <select id="b3b_verif" style="width:165px;" onchange="guardarDatos()">
+                <option value="">¿Indicación verificada?</option>
+                <option value="Sí">Verificada: Sí</option>
+                <option value="No">Verificada: No</option>
+              </select>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Concentración</strong></td>
+          <td>Tira antes del ciclo; solución dentro de su vida útil</td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <select id="b3b_tira" style="width:145px;" onchange="guardarDatos()">
+                <option value="">Tira: Seleccione</option>
+                <option value="Sí">Tira: Sí</option>
+                <option value="No">Tira: No</option>
+              </select>
+              <input type="text" id="b3b_activ" placeholder="Fecha activación" style="width:160px;" oninput="guardarDatos()" />
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Tiempo y temperatura</strong></td>
+          <td>Los del fabricante, con la temperatura medida al inicio y al final</td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <input type="text" id="b3b_ini" placeholder="Inicio (Ej. 19:00 h, 24°C)" style="width:185px;" oninput="guardarDatos()" />
+              <input type="text" id="b3b_fin" placeholder="Fin (Ej. 23:00 h, 23°C)" style="width:185px;" oninput="guardarDatos()" />
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Después de la inmersión</strong></td>
+          <td>Enjuague con agua y uso inmediato; no se almacena como estéril</td>
+          <td>
+            <select id="b3b_enjuague" style="width:180px;" onchange="guardarDatos()">
+              <option value="">Enjuague: Seleccione</option>
+              <option value="Sí">Enjuague: Sí</option>
+              <option value="No">Enjuague: No</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Responsable</strong></td>
+          <td>Odontólogo de la jornada</td>
+          <td><input type="text" id="b3b_resp" placeholder="Nombre y firma / registro" oninput="guardarDatos()" /></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CAMPO APARTE SOLO CON LOS CUADROS DE LA RUTA CRÍTICA -->
+  <div class="ruta-box" id="seccion-ruta-critica">
+    <div class="ruta-box-title">Ruta crítica del instrumental en jornadas extramurales</div>
+    <img id="img-ruta-critica" src="img/ruta_critica_cuadros.jpg" alt="Ruta crítica del instrumental" onerror="mostrarAvisoImagen('img-ruta-critica', 'fallback-ruta')" />
+    <div id="fallback-ruta" class="img-fallback">
+      <strong>Nota:</strong> No se encontró <code>img/ruta_critica_cuadros.jpg</code>. Verifica que exista la carpeta <code>img</code> junto a <code>index.html</code> con el archivo <code>ruta_critica_cuadros.jpg</code>.
+    </div>
+  </div>
+</div>
+
+<!-- VENTANA EMERGENTE (MODAL VISTA PREVIA / EXCEL) -->
+<div class="modal-backdrop" id="modal-preview">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 style="margin:0; font-size:1rem;">Vista Previa del Anexo A</h3>
+      <button class="btn btn-secondary" style="padding:4px 10px;" onclick="cerrarVistaPrevia()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-content"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="cerrarVistaPrevia()">Cerrar</button>
+      <button class="btn btn-primary" onclick="descargarExcel()">📥 Descargar Excel (.xls)</button>
+    </div>
+  </div>
+</div>
+
+<!-- VENTANA EMERGENTE (MODAL HISTORIAL DE FORMULARIOS) -->
+<div class="modal-backdrop" id="modal-historial">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 style="margin:0; font-size:1rem;">Registro de Formularios Diligenciados</h3>
+      <button class="btn btn-secondary" style="padding:4px 10px;" onclick="cerrarHistorialFormularios()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-historial-content"></div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="registrarFormularioActual(true)">💾 Guardar formulario actual en el registro</button>
+      <button class="btn btn-secondary" onclick="cerrarHistorialFormularios()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const INSTRUMENTOS_BASE = [
+    { paq: "Básico", inst: "Espejo bucal", clas: "Semicrítico" },
+    { paq: "Básico", inst: "Explorador", clas: "Semicrítico; crítico si penetra tejido" },
+    { paq: "Básico", inst: "Pinza algodonera", clas: "Semicrítico" },
+    { paq: "Básico", inst: "FP3", clas: "Semicrítico" },
+    { paq: "Quirúrgico", inst: "Fórceps (tipo: ______)", clas: "Crítico", editable: true },
+    { paq: "Quirúrgico", inst: "Elevadores", clas: "Crítico" },
+    { paq: "Quirúrgico", inst: "Otros: ______", clas: "Crítico", editable: true },
+    { paq: "Curetas", inst: "Curetas periodontales", clas: "Crítico" },
+    { paq: "Piezas de mano", inst: "Alta velocidad / contraángulo", clas: "Semicrítico" }
+  ];
+
+  const VERIFICACIONES_BASE = [
+    { num: 1, critico: true, text: "Control crítico. Paquetes críticos estériles ≥ procedimientos críticos programados.", mom: "Antes de salir", acc: "Ajustar el cupo y registrar la demanda que se reprogramará" },
+    { num: 2, critico: true, text: "Control crítico. Todos los paquetes con empaque íntegro y seco, indicador químico virado y rótulo legible (lote y fecha).", mom: "Salida y llegada", acc: "Retirar el paquete; no se usa" },
+    { num: 3, critico: false, text: "Caja estéril cerrada y separada del contenedor de usados y de los residuos; insumos protegidos del sol y la humedad.", mom: "Salida", acc: "Reorganizar la carga antes de partir" },
+    { num: 4, critico: false, text: "Zona limpia y zona sucia separadas; contenedor rígido y guardián al alcance.", mom: "Llegada", acc: "Corregir antes de atender" },
+    { num: 5, critico: false, text: "Inspección antes del uso: instrumento limpio, íntegro y funcional (sin corrosión, filo dañado ni articulación trabada).", mom: "Antes de cada uso", acc: "Retirar el instrumento" },
+    { num: 6, critico: true, text: "Control crítico. Un paquete crítico estéril abierto frente al paciente en cada procedimiento crítico.", mom: "Durante la atención", acc: "Suspender y reprogramar o remitir el procedimiento" },
+    { num: 7, critico: false, text: "Instrumental usado en contenedor rígido con tapa, separado de lo estéril y de lo desinfectado, sin limpiar filos a mano.", mom: "Durante la atención", acc: "Corregir de inmediato; registrar en el bloque 4" },
+    { num: 8, critico: false, text: "Conciliación: total que regresa igual al total que salió, o diferencia explicada.", mom: "Al regresar", acc: "Reportar faltante o daño al encargado de esterilización" },
+    { num: 9, critico: false, text: "Registro de procedimientos críticos: realizados, con paquete estéril, reprogramados o remitidos por falta de paquetes.", mom: "Cierre de la jornada", acc: "Completar el registro antes de entregar la lista" }
+  ];
+
+  const STORAGE_KEY = "anexoA_gonawindua_v3";
+  const HISTORIAL_KEY = "anexoA_historial_formularios_v1";
+
+  let estado = {
+    meta: {},
+    b1: INSTRUMENTOS_BASE.map(i => ({ ...i, unid: "", paqNum: "", integro: "", abiertos: "", regresa: "", obs: "" })),
+    b2: VERIFICACIONES_BASE.map(v => ({ ...v, resp: "" })),
+    b3a: [1, 2, 3].map(c => ({ ciclo: c, fecha: "", activ: "", tira: "", limp: "", ini: "", fin: "", tiempo: "", enj: "", resp: "" })),
+    b3b: {}
+  };
+
+  let historialFormularios = [];
+
+  function mostrarAvisoImagen(imgId, fallbackId) {
+    const img = document.getElementById(imgId);
+    const fb = document.getElementById(fallbackId);
+    if (img) img.style.display = "none";
+    if (fb) fb.style.display = "block";
+  }
+
+  function irARuta() {
+    document.getElementById("seccion-ruta-critica").scrollIntoView({ behavior: "smooth" });
+  }
+
+  function cargarHistorial() {
+    try {
+      const raw = localStorage.getItem(HISTORIAL_KEY);
+      historialFormularios = raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      historialFormularios = [];
+    }
+    actualizarContadorBoton();
+  }
+
+  function guardarHistorial() {
+    localStorage.setItem(HISTORIAL_KEY, JSON.stringify(historialFormularios));
+    actualizarContadorBoton();
+  }
+
+  function actualizarContadorBoton() {
+    const el = document.getElementById("contador-btn");
+    if (el) el.textContent = historialFormularios.length;
+  }
+
+  function obtenerFechaRegistro() {
+    const ahora = new Date();
+    const fecha = ahora.toLocaleDateString("es-CO", { year: "numeric", month: "2-digit", day: "2-digit" });
+    const hora = ahora.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" });
+    return `${fecha} ${hora}`;
+  }
+
+  function registrarFormularioActual(mostrarMensaje = false) {
+    const m = estado.meta || {};
+    const odontologo = (m.odontologo || "").trim() || "Sin especificar";
+    const fechaJornada = (m.fechas || "").trim();
+    const fechaRegistro = obtenerFechaRegistro();
+    const comunidad = (m.comunidad || "").trim() || "Sin comunidad";
+
+    const tieneContenido =
+      Boolean((m.odontologo || "").trim()) ||
+      Boolean((m.comunidad || "").trim()) ||
+      Boolean((m.fechas || "").trim()) ||
+      estado.b1.some(r => r.unid || r.paqNum || r.abiertos || r.regresa || r.obs) ||
+      estado.b2.some(r => r.resp);
+
+    if (!tieneContenido) {
+      if (mostrarMensaje) alert("El formulario actual está vacío; diligencia al menos algún dato antes de registrarlo.");
+      return false;
+    }
+
+    historialFormularios.unshift({
+      id: Date.now(),
+      fechaRegistro,
+      fechaJornada: fechaJornada || fechaRegistro.split(" ")[0],
+      odontologo,
+      comunidad
+    });
+
+    guardarHistorial();
+    if (mostrarMensaje) {
+      alert(`Formulario registrado (Total: ${historialFormularios.length}).`);
+      renderHistorialModal();
+    }
+    return true;
+  }
+
+  function abrirHistorialFormularios() {
+    renderHistorialModal();
+    document.getElementById("modal-historial").style.display = "flex";
+  }
+
+  function cerrarHistorialFormularios() {
+    document.getElementById("modal-historial").style.display = "none";
+  }
+
+  function renderHistorialModal() {
+    const total = historialFormularios.length;
+    let filas = "";
+
+    if (total === 0) {
+      filas = `<tr><td colspan="5" style="text-align:center; color:#64748b; padding:16px;">Aún no hay formularios registrados en el historial.</td></tr>`;
+    } else {
+      filas = historialFormularios.map((item, index) => `
+        <tr>
+          <td style="text-align:center;"><strong>${total - index}</strong></td>
+          <td><strong>${item.fechaJornada}</strong></td>
+          <td style="font-size:0.78rem; color:#64748b;">${item.fechaRegistro}</td>
+          <td><strong>${item.odontologo}</strong></td>
+          <td>${item.comunidad}</td>
+        </tr>
+      `).join("");
+    }
+
+    document.getElementById("modal-historial-content").innerHTML = `
+      <div class="summary-card">
+        <div>
+          <div style="font-size:0.82rem; color:#166534; font-weight:700;">TOTAL DE FORMULARIOS DILIGENCIADOS</div>
+          <div style="font-size:0.82rem; color:#334155;">Se registran automáticamente al descargar Excel o limpiar/iniciar nueva jornada, o cuando los guardas manualmente.</div>
+        </div>
+        <div class="summary-count">${total}</div>
+      </div>
+      <div class="table-wrap" style="margin-bottom:0;">
+        <table style="min-width:560px;">
+          <thead>
+            <tr>
+              <th style="width:55px; text-align:center;">N.º</th>
+              <th>Fecha</th>
+              <th>Guardado</th>
+              <th>Odontólogo</th>
+              <th>Comunidad / Lugar</th>
+            </tr>
+          </thead>
+          <tbody>${filas}</tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  function inicializar() {
+    const guardado = localStorage.getItem(STORAGE_KEY);
+    if (guardado) estado = JSON.parse(guardado);
+    cargarHistorial();
+    cargarCamposMeta();
+    renderBloque1();
+    renderBloque2();
+    renderBloque3A();
+  }
+
+  function cargarCamposMeta() {
+    const ids = ["institucion","proceso","codigo","comunidad","fechas","dias_pacientes","odontologo","esterilizacion","cupo_criticos"];
+    ids.forEach(id => { if (estado.meta[id] !== undefined) document.getElementById(id).value = estado.meta[id]; });
+    const b3ids = ["b3b_prod","b3b_lote","b3b_verif","b3b_tira","b3b_activ","b3b_ini","b3b_fin","b3b_enjuague","b3b_resp"];
+    b3ids.forEach(id => { if (estado.b3b[id] !== undefined) document.getElementById(id).value = estado.b3b[id]; });
+  }
+
+  function guardarDatos() {
+    const ids = ["institucion","proceso","codigo","comunidad","fechas","dias_pacientes","odontologo","esterilizacion","cupo_criticos"];
+    ids.forEach(id => { estado.meta[id] = document.getElementById(id).value; });
+    const b3ids = ["b3b_prod","b3b_lote","b3b_verif","b3b_tira","b3b_activ","b3b_ini","b3b_fin","b3b_enjuague","b3b_resp"];
+    b3ids.forEach(id => { estado.b3b[id] = document.getElementById(id).value; });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
+    const hora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    document.getElementById("save-status").textContent = "Guardado: " + hora;
+  }
+
+  function renderBloque1() {
+    const tbody = document.getElementById("tbody-bloque1");
+    tbody.innerHTML = "";
+    let sumPaq = 0, sumSale = 0, sumAb = 0, sumReg = 0;
+
+    estado.b1.forEach((row, idx) => {
+      const u = parseFloat(row.unid) || 0;
+      const p = parseFloat(row.paqNum) || 0;
+      const sale = u * p;
+      const ab = parseFloat(row.abiertos) || 0;
+      const reg = row.regresa !== "" ? parseFloat(row.regresa) : "";
+      const diff = (reg !== "" && sale > 0) ? (reg - sale) : "";
+
+      sumPaq += p; sumSale += sale; sumAb += ab;
+      if (reg !== "") sumReg += reg;
+
+      const tr = document.createElement("tr");
+      if (diff !== "" && diff !== 0) tr.classList.add("alert-row");
+
+      tr.innerHTML = `
+        <td><strong>${row.paq}</strong></td>
+        <td>${row.editable ? `<input type="text" value="${row.inst}" onchange="estado.b1[${idx}].inst=this.value; guardarDatos()">` : row.inst}</td>
+        <td style="font-size:0.76rem;">${row.clas}</td>
+        <td><input type="number" min="0" value="${row.unid}" oninput="actualizarB1(${idx}, 'unid', this.value)"></td>
+        <td><input type="number" min="0" value="${row.paqNum}" oninput="actualizarB1(${idx}, 'paqNum', this.value)"></td>
+        <td class="calc-cell">${sale || 0}</td>
+        <td>
+          <select onchange="actualizarB1(${idx}, 'integro', this.value)">
+            <option value="" ${row.integro===""?"selected":""}>-</option>
+            <option value="Sí" ${row.integro==="Sí"?"selected":""}>Sí</option>
+            <option value="No" ${row.integro==="No"?"selected":""}>No</option>
+          </select>
+        </td>
+        <td><input type="number" min="0" value="${row.abiertos}" oninput="actualizarB1(${idx}, 'abiertos', this.value)"></td>
+        <td><input type="number" min="0" value="${row.regresa}" oninput="actualizarB1(${idx}, 'regresa', this.value)"></td>
+        <td>
+          <div style="display:flex; gap:4px; align-items:center;">
+            ${diff !== "" && diff !== 0 ? `<span style="color:#b91c1c; font-weight:bold;">Dif: ${diff}</span>` : ""}
+            <input type="text" placeholder="Observación" value="${row.obs}" oninput="estado.b1[${idx}].obs=this.value; guardarDatos()">
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById("sum-paquetes").textContent = sumPaq;
+    document.getElementById("sum-sale").textContent = sumSale;
+    document.getElementById("sum-abiertos").textContent = sumAb;
+    document.getElementById("sum-regresa").textContent = sumReg;
+  }
+
+  function actualizarB1(idx, campo, valor) {
+    estado.b1[idx][campo] = valor;
+    guardarDatos();
+    renderBloque1();
+  }
+
+  function renderBloque2() {
+    const tbody = document.getElementById("tbody-bloque2");
+    tbody.innerHTML = "";
+    let hayAlerta = false;
+
+    estado.b2.forEach((item, idx) => {
+      if (item.critico && item.resp === "No") hayAlerta = true;
+      const tr = document.createElement("tr");
+      if (item.resp === "No") tr.classList.add("alert-row");
+
+      tr.innerHTML = `
+        <td style="text-align:center;"><strong>${item.num}</strong></td>
+        <td>${item.text}</td>
+        <td><strong>${item.mom}</strong></td>
+        <td>
+          <div class="radio-group">
+            <span class="radio-pill ${item.resp==='Sí'?'active-si':''}" onclick="setRespB2(${idx}, 'Sí')">Sí</span>
+            <span class="radio-pill ${item.resp==='No'?'active-no':''}" onclick="setRespB2(${idx}, 'No')">No</span>
+            <span class="radio-pill ${item.resp==='N/A'?'active-na':''}" onclick="setRespB2(${idx}, 'N/A')">N/A</span>
+          </div>
+        </td>
+        <td style="font-size:0.78rem;">${item.acc}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById("alerta-critica").style.display = hayAlerta ? "block" : "none";
+  }
+
+  function setRespB2(idx, val) {
+    estado.b2[idx].resp = (estado.b2[idx].resp === val) ? "" : val;
+    guardarDatos();
+    renderBloque2();
+  }
+
+  function renderBloque3A() {
+    const tbody = document.getElementById("tbody-bloque3a");
+    tbody.innerHTML = "";
+    estado.b3a.forEach((c, idx) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td style="text-align:center;"><strong>${c.ciclo}</strong></td>
+        <td><input type="date" value="${c.fecha}" onchange="estado.b3a[${idx}].fecha=this.value; guardarDatos()"></td>
+        <td><input type="text" placeholder="Fecha/Días" value="${c.activ}" oninput="estado.b3a[${idx}].activ=this.value; guardarDatos()"></td>
+        <td><select onchange="estado.b3a[${idx}].tira=this.value; guardarDatos()"><option value="">-</option><option ${c.tira==='Sí'?'selected':''}>Sí</option><option ${c.tira==='No'?'selected':''}>No</option></select></td>
+        <td><select onchange="estado.b3a[${idx}].limp=this.value; guardarDatos()"><option value="">-</option><option ${c.limp==='Sí'?'selected':''}>Sí</option><option ${c.limp==='No'?'selected':''}>No</option></select></td>
+        <td><input type="time" value="${c.ini}" onchange="estado.b3a[${idx}].ini=this.value; guardarDatos()"></td>
+        <td><input type="time" value="${c.fin}" onchange="estado.b3a[${idx}].fin=this.value; guardarDatos()"></td>
+        <td><select onchange="estado.b3a[${idx}].tiempo=this.value; guardarDatos()"><option value="">-</option><option ${c.tiempo==='Sí'?'selected':''}>Sí</option><option ${c.tiempo==='No'?'selected':''}>No</option></select></td>
+        <td><select onchange="estado.b3a[${idx}].enj=this.value; guardarDatos()"><option value="">-</option><option ${c.enj==='Sí'?'selected':''}>Sí</option><option ${c.enj==='No'?'selected':''}>No</option></select></td>
+        <td><input type="text" placeholder="Nombre" value="${c.resp}" oninput="estado.b3a[${idx}].resp=this.value; guardarDatos()"></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function construirDocumentoHTML() {
+    const m = estado.meta;
+    const b3 = estado.b3b;
+
+    let filasB1 = estado.b1.map(r => {
+      const sale = (parseFloat(r.unid)||0) * (parseFloat(r.paqNum)||0);
+      return `<tr>
+        <td>${r.paq}</td><td>${r.inst}</td><td>${r.clas}</td>
+        <td align="center">${r.unid||0}</td><td align="center">${r.paqNum||0}</td><td align="center"><strong>${sale}</strong></td>
+        <td align="center">${r.integro||'-'}</td><td align="center">${r.abiertos||0}</td><td align="center">${r.regresa||0}</td>
+        <td>${r.obs||''}</td>
+      </tr>`;
+    }).join("");
+
+    let filasB2 = estado.b2.map(r => `<tr>
+      <td align="center">${r.num}</td><td>${r.text}</td><td>${r.mom}</td>
+      <td align="center"><strong>${r.resp||'Sin marcar'}</strong></td><td>${r.acc}</td>
+    </tr>`).join("");
+
+    let filasB3A = estado.b3a.map(r => `<tr>
+      <td align="center">${r.ciclo}</td><td>${r.fecha}</td><td>${r.activ}</td><td>${r.tira}</td>
+      <td>${r.limp}</td><td>${r.ini}</td><td>${r.fin}</td><td>${r.tiempo}</td><td>${r.enj}</td><td>${r.resp}</td>
+    </tr>`).join("");
+
+    return `
+      <table border="1" cellspacing="0" cellpadding="5" style="border-collapse:collapse; width:100%; font-family:Arial, sans-serif; font-size:10.5pt;">
+        <tr><td colspan="10" style="background:#1e5631; color:#ffffff; font-weight:bold;">Anexo A. Lista de chequeo consolidada del instrumental para jornadas extramurales</td></tr>
+        <tr>
+          <td colspan="3"><strong>Institución:</strong> ${m.institucion||''}</td>
+          <td colspan="4"><strong>Proceso:</strong> ${m.proceso||''}</td>
+          <td colspan="3"><strong>Código:</strong> ${m.codigo||''}</td>
+        </tr>
+        <tr>
+          <td colspan="3"><strong>Comunidad:</strong> ${m.comunidad||''}</td>
+          <td colspan="4"><strong>Fechas:</strong> ${m.fechas||''}</td>
+          <td colspan="3"><strong>Días/Pacientes:</strong> ${m.dias_pacientes||''}</td>
+        </tr>
+        <tr>
+          <td colspan="3"><strong>Odontólogo:</strong> ${m.odontologo||''}</td>
+          <td colspan="4"><strong>Esterilización:</strong> ${m.esterilizacion||''}</td>
+          <td colspan="3"><strong>Cupo críticos:</strong> ${m.cupo_criticos||''}</td>
+        </tr>
+        <tr><td colspan="10" style="background:#e8f3ec; font-weight:bold;">Bloque 1. Inventario consolidado</td></tr>
+        <tr style="background:#dcebe1; font-weight:bold;">
+          <th>Paquete</th><th>Instrumento</th><th>Clasificación</th><th>Unid/Paq</th><th>N.º Paq</th><th>Total Sale</th><th>Íntegro</th><th>Abiertos</th><th>Regresa</th><th>Observación</th>
+        </tr>
+        ${filasB1}
+        <tr><td colspan="10" style="background:#e8f3ec; font-weight:bold;">Bloque 2. Verificaciones críticas</td></tr>
+        <tr style="background:#dcebe1; font-weight:bold;">
+          <th>N.º</th><th>Criterio verificable</th><th>Momento</th><th>Respuesta</th><th>Acción si es No</th>
+        </tr>
+        ${filasB2}
+        <tr><td colspan="10" style="background:#e8f3ec; font-weight:bold;">Bloque 3A. Desinfección de alto nivel</td></tr>
+        <tr style="background:#dcebe1; font-weight:bold;">
+          <th>Ciclo</th><th>Fecha</th><th>Activación</th><th>Tira</th><th>Limpieza</th><th>Inicio</th><th>Fin</th><th>Tiempo</th><th>Enjuague</th><th>Responsable</th>
+        </tr>
+        ${filasB3A}
+        <tr><td colspan="10" style="background:#e8f3ec; font-weight:bold;">Bloque 3B. Ciclo químico nocturno</td></tr>
+        <tr><td colspan="3"><strong>Producto y Lote:</strong> ${b3.b3b_prod||''} / ${b3.b3b_lote||''}</td><td colspan="7"><strong>Indicación verificada:</strong> ${b3.b3b_verif||''}</td></tr>
+        <tr><td colspan="3"><strong>Tira / Activación:</strong> ${b3.b3b_tira||''} / ${b3.b3b_activ||''}</td><td colspan="7"><strong>Inicio / Fin:</strong> ${b3.b3b_ini||''} - ${b3.b3b_fin||''}</td></tr>
+        <tr><td colspan="3"><strong>Enjuague:</strong> ${b3.b3b_enjuague||''}</td><td colspan="7"><strong>Responsable:</strong> ${b3.b3b_resp||''}</td></tr>
+      </table>
+    `;
+  }
+
+  function abrirVistaPrevia() {
+    document.getElementById("modal-content").innerHTML = construirDocumentoHTML();
+    document.getElementById("modal-preview").style.display = "flex";
+  }
+
+  function cerrarVistaPrevia() {
+    document.getElementById("modal-preview").style.display = "none";
+  }
+
+  function descargarExcel() {
+    registrarFormularioActual(false);
+
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+      <head><meta charset="UTF-8"></head>
+      <body>${construirDocumentoHTML()}</body>
+      </html>`;
+    const blob = new Blob([html], { type: "application/vnd.ms-excel;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const com = (estado.meta.comunidad || "Jornada").replace(/\s+/g, "_");
+    a.href = url;
+    a.download = `Anexo_A_Gonawindua_${com}.xls`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function limpiarFormulario() {
+    if (!confirm("¿Borrar los datos actuales para iniciar una nueva jornada?")) return;
+    registrarFormularioActual(false);
+    localStorage.removeItem(STORAGE_KEY);
+    location.reload();
+  }
+
+  inicializar();
+</script>
+</body>
+</html>
